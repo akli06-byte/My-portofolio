@@ -68,21 +68,48 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
             color: white;
             position: relative;
             overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
+        .hero-video {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            opacity: 0.3;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0; /* far back */
+        }
+
+        /* Image layer (provided illustration) */
+        .hero-image {
+            position: absolute;
+            inset: 0;
+            background-image: url('qa-bg.jpg'); /* save provided image as qa-bg.jpg in project root */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 1;
+            transform: translateY(0);
+            animation: kenburns 28s ease-in-out infinite alternate;
+            filter: saturate(1.05) contrast(1.02);
+        }
+
+        @keyframes kenburns {
+            0% { transform: scale(1) translateY(0); }
+            100% { transform: scale(1.08) translateY(-1%); }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 150, 105, 0.4);
+            z-index: 2;
         }
 
         .hero-content {
@@ -90,7 +117,63 @@
             margin: 0 auto;
             padding: 0 2rem;
             position: relative;
-            z-index: 2;
+            z-index: 4;
+        }
+
+        /* QA Scene (animated background illustration) */
+        .qa-scene {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+            opacity: 0.4; /* make the tester more visible */
+        }
+        .qa-scene svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        /* Bugs animation */
+        @keyframes bugMove1 {
+            0% { offset-distance: 0%; transform: rotate(0deg); }
+            50% { transform: rotate(3deg); }
+            100% { offset-distance: 100%; transform: rotate(-3deg); }
+        }
+        @keyframes bugMove2 {
+            0% { offset-distance: 0%; transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+            100% { offset-distance: 100%; transform: rotate(-5deg); }
+        }
+        .bug {
+            offset-rotate: auto;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+        .bug--slow { animation-duration: 24s; }
+        .bug--med { animation-duration: 18s; }
+        .bug--fast { animation-duration: 12s; }
+        /* Scanner beam sweep */
+        @keyframes sweep {
+            0% { transform: rotate(-20deg); }
+            50% { transform: rotate(20deg); }
+            100% { transform: rotate(-20deg); }
+        }
+        .scanner {
+            transform-origin: center 60%;
+            animation: sweep 9s ease-in-out infinite;
+        }
+        /* Tester subtle bob to imply movement */
+        @keyframes bob {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+            100% { transform: translateY(0); }
+        }
+        .tester {
+            animation: bob 3.5s ease-in-out infinite;
+        }
+        /* Reduce visual density on small screens */
+        @media (max-width: 768px) {
+            .qa-scene { opacity: 0.18; }
         }
 
         .hero-text h1 {
@@ -380,8 +463,10 @@
 
         .contact-content {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            justify-items: center;
+            text-align: center;
         }
 
         .contact-info h3 {
@@ -389,10 +474,20 @@
             margin-bottom: 1rem;
         }
 
+        /* Center the contact info block */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin: 0 auto;
+        }
+
         .contact-item {
             display: flex;
             align-items: center;
             margin-bottom: 1rem;
+            justify-content: center;
         }
 
         .contact-icon {
@@ -498,6 +593,8 @@
             .contact-content {
                 grid-template-columns: 1fr;
                 gap: 2rem;
+                justify-items: center;
+                text-align: center;
             }
 
             .timeline::before {
@@ -548,6 +645,91 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="QA_video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-image" role="img" aria-label="QA tester chasing bugs illustration"></div>
+        <div class="hero-overlay"></div>
+        <!-- Animated QA background scene -->
+        <div class="qa-scene" aria-hidden="true">
+            <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+                <!-- Network/grid background -->
+                <defs>
+                    <linearGradient id="g1" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/>
+                        <stop offset="100%" stop-color="#34d399" stop-opacity="0.05"/>
+                    </linearGradient>
+                    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#34d399" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
+                    </radialGradient>
+                    <path id="p1" d="M 100 700 C 300 600 450 650 650 550 C 850 450 1000 500 1100 420"/>
+                    <path id="p2" d="M 150 200 C 350 260 480 220 700 300 C 900 370 1000 360 1130 390"/>
+                    <path id="p3" d="M 80 480 C 260 420 380 470 560 430 C 780 380 980 420 1150 350"/>
+                    <!-- Simple bug symbol: body + legs -->
+                    <g id="bugSymbol">
+                        <ellipse cx="0" cy="0" rx="10" ry="14" fill="#ef4444"/>
+                        <circle cx="0" cy="-12" r="6" fill="#b91c1c"/>
+                        <line x1="-12" y1="-6" x2="-24" y2="-10" stroke="#b91c1c" stroke-width="3"/>
+                        <line x1="12" y1="-6" x2="24" y2="-10" stroke="#b91c1c" stroke-width="3"/>
+                        <line x1="-12" y1="0" x2="-24" y2="0" stroke="#b91c1c" stroke-width="3"/>
+                        <line x1="12" y1="0" x2="24" y2="0" stroke="#b91c1c" stroke-width="3"/>
+                        <line x1="-12" y1="6" x2="-24" y2="10" stroke="#b91c1c" stroke-width="3"/>
+                        <line x1="12" y1="6" x2="24" y2="10" stroke="#b91c1c" stroke-width="3"/>
+                    </g>
+                </defs>
+
+                <!-- Soft glow nodes -->
+                <circle cx="200" cy="180" r="90" fill="url(#glow)"/>
+                <circle cx="980" cy="220" r="120" fill="url(#glow)"/>
+                <circle cx="640" cy="640" r="140" fill="url(#glow)"/>
+
+                <!-- QA Tester silhouette with magnifying glass (clearer, larger) -->
+                <g class="tester" transform="translate(220,520) scale(1.25)" opacity="0.95">
+                    <!-- torso/legs -->
+                    <path d="M0 20 C 30 -80 170 -80 200 20 L 200 90 L 0 90 Z" fill="url(#g1)" stroke="#ffffff" stroke-opacity="0.55" stroke-width="2"/>
+                    <!-- head -->
+                    <circle cx="100" cy="-60" r="38" fill="#34d399" opacity="0.85" stroke="#ffffff" stroke-opacity="0.6" stroke-width="2"/>
+                    <!-- front arm reaching out -->
+                    <path d="M150,10 C 180,0 200,-10 230,-25" stroke="#a7f3d0" stroke-width="10" stroke-linecap="round"/>
+                    <!-- back arm -->
+                    <path d="M80,10 C 60,0 40,5 20,0" stroke="#a7f3d0" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
+                    <!-- magnifying glass -->
+                    <g class="scanner" transform="translate(240,-35)">
+                        <circle cx="0" cy="0" r="40" fill="none" stroke="#e5fff6" stroke-width="7"/>
+                        <rect x="-6" y="38" width="12" height="30" rx="6" fill="#e5fff6"/>
+                        <!-- stronger scanning beam -->
+                        <path d="M0,0 L210,85 L210,130 L0,22 Z" fill="#10b981" opacity="0.28"/>
+                    </g>
+                    <!-- running leg shapes -->
+                    <path d="M40,90 C 60,120 100,120 120,90" fill="none" stroke="#a7f3d0" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+                    <path d="M160,90 C 180,120 220,120 240,90" fill="none" stroke="#a7f3d0" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+                </g>
+
+                <!-- Moving bugs along paths -->
+                <g>
+                    <use href="#bugSymbol" class="bug bug--fast" style="offset-path: path('M 100 700 C 300 600 450 650 650 550 C 850 450 1000 500 1100 420'); animation-name: bugMove1;"/>
+                    <use href="#bugSymbol" class="bug bug--med" style="offset-path: path('M 150 200 C 350 260 480 220 700 300 C 900 370 1000 360 1130 390'); animation-name: bugMove2; animation-delay: 2s;"/>
+                    <use href="#bugSymbol" class="bug bug--slow" style="offset-path: path('M 80 480 C 260 420 380 470 560 430 C 780 380 980 420 1150 350'); animation-name: bugMove1; animation-delay: 4s;"/>
+                    <use href="#bugSymbol" class="bug bug--med" style="offset-path: path('M 1100 420 C 900 430 760 470 600 520 C 440 570 280 560 120 600'); animation-name: bugMove2; animation-delay: 6s;"/>
+                </g>
+
+                <!-- Decorative network lines -->
+                <path d="M 120 140 L 400 260 L 720 200 L 980 260" stroke="#10b981" stroke-opacity="0.25" stroke-width="2" fill="none"/>
+                <path d="M 180 660 L 460 560 L 760 600 L 1040 520" stroke="#10b981" stroke-opacity="0.2" stroke-width="2" fill="none"/>
+                <g fill="#10b981" fill-opacity="0.35">
+                    <circle cx="120" cy="140" r="4"/>
+                    <circle cx="400" cy="260" r="4"/>
+                    <circle cx="720" cy="200" r="4"/>
+                    <circle cx="980" cy="260" r="4"/>
+                    <circle cx="180" cy="660" r="4"/>
+                    <circle cx="460" cy="560" r="4"/>
+                    <circle cx="760" cy="600" r="4"/>
+                    <circle cx="1040" cy="520" r="4"/>
+                </g>
+            </svg>
+        </div>
         <div class="hero-content">
             <div class="hero-text">
                 <h1>Welcome to Akli's portfolio</h1>
@@ -568,8 +750,8 @@
             <div class="about-content">
                 <div class="about-text">
                     <h3>Dedicated QA Professional with a Passion for Quality</h3>
-                    <p>I'm a QA Tester with nearly two years of experience in software testing and quality assurance. My journey in testing began with a curiosity about how software works and has evolved into a passion for ensuring exceptional user experiences.</p>
-                    <p>I specialize in both manual and automated testing methodologies, with expertise in functional testing, regression testing, automation testing, and user acceptance testing. My approach combines technical skills with analytical thinking to identify potential issues before they reach end users.</p>
+                    <p>I'm a certified QA Tester with over 5 years of experience in software testing and quality assurance. My journey in testing began with a curiosity about how software works and has evolved into a passion for ensuring exceptional user experiences.</p>
+                    <p>I specialize in both manual and automated testing methodologies, with expertise in functional testing, regression testing, performance testing, and user acceptance testing. My approach combines technical skills with analytical thinking to identify potential issues before they reach end users.</p>
                     <p>When I'm not testing applications, you'll find me exploring new testing tools, contributing to testing communities, or sharing knowledge about best practices in quality assurance. I believe in continuous learning and staying updated with the latest testing methodologies and tools.</p>
                 </div>
                 <div class="about-image">
@@ -626,8 +808,8 @@
                         <i class="fas fa-shopping-cart"></i>
                     </div>
                     <div class="project-content">
-                        <h3>E-Commerce Platform Testing</h3>
-                        <p>Comprehensive testing of a full-stack e-commerce application including payment integration, inventory management, and user workflows. Implemented automated test suites reducing regression testing time by 70%.</p>
+                        <h3>Ivalua's E-Procurement Platform Testing</h3>
+                        <p>Comprehensive testing of Ivalua's E-Procurement Platform application including payment integration, inventory management, and user workflows. Implemented automated test suites reducing regression testing time by 70%.</p>
                         <div class="project-tags">
                             <span class="tag">Selenium</span>
                             <span class="tag">TestNG</span>
@@ -648,21 +830,6 @@
                             <span class="tag">Mobile Testing</span>
                             <span class="tag">Security Testing</span>
                             <span class="tag">Cross-platform</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card fade-in">
-                    <div class="project-image">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-                    <div class="project-content">
-                        <h3>Performance Testing Suite</h3>
-                        <p>Designed and executed performance testing strategies for high-traffic web applications. Created load testing scenarios and performance monitoring dashboards to ensure optimal system performance.</p>
-                        <div class="project-tags">
-                            <span class="tag">JMeter</span>
-                            <span class="tag">Load Testing</span>
-                            <span class="tag">Performance</span>
-                            <span class="tag">Monitoring</span>
                         </div>
                     </div>
                 </div>
@@ -706,70 +873,40 @@
                         <p>Developed and maintained automated test suites, collaborated with development teams for CI/CD integration, and performed comprehensive regression testing for web and mobile applications.</p>
                     </div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content fade-in">
-                        <h3>Manual QA Tester</h3>
-                        <p><strong>Software Testing Agency</strong> | 2019 - 2020</p>
-                        <p>Performed manual testing for various client projects, created detailed test cases, reported bugs, and ensured quality standards were met across different platforms and browsers.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content fade-in">
-                        <h3>Junior QA Tester</h3>
-                        <p><strong>Startup Testing Lab</strong> | 2018 - 2019</p>
-                        <p>Started my QA career with basic testing tasks, learned testing methodologies, and contributed to team testing efforts while developing skills in bug reporting and test case creation.</p>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="section contact">
-        <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3>Let's Work Together</h3>
-                    <p>I'm always interested in new testing opportunities and challenging projects. Whether you need a QA specialist for your team or want to discuss testing strategies, feel free to reach out!</p>
-                    <br>
-                    <div class="contact-item">
-                        <i class="fas fa-envelope contact-icon"></i>
-                        <span>aklizeroual@gmail.com</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-phone contact-icon"></i>
-                        <span>+33 7 61 87 08 91</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt contact-icon"></i>
-                        <span>Paris, France</span>
-                    </div>
+<section id="contact" class="section contact">
+    <div class="container">
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3>Let's Work Together</h3>
+                <p style="margin-bottom: 30px;">
+                    I'm always interested in new testing opportunities and challenging projects.
+                    Whether you need a QA specialist for your team or want to discuss testing strategies,
+                    feel free to reach out!
+                </p>
+
+                <div class="contact-item">
+                    <i class="fas fa-envelope contact-icon"></i>
+                    <span>aklizeroual@gmail.com</span>
                 </div>
-                <form class="contact-form">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="5" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Send Message</button>
-                </form>
+                <div class="contact-item">
+                    <i class="fas fa-phone contact-icon"></i>
+                    <span>+33 7 61 87 08 91</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt contact-icon"></i>
+                    <span>Paris, France</span>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <!-- Footer -->
     <footer class="footer">
@@ -787,8 +924,8 @@
     <!-- EmailJS CDN -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
-        // Initialize EmailJS
-        emailjs.init("service_4i7i8nk"); // Your EmailJS service ID
+        // Initialize EmailJS with User ID (replace with your actual User ID)
+        emailjs.init("YOUR_USER_ID_HERE"); // Replace with your EmailJS User ID
         
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -899,4 +1036,3 @@
     </script>
 </body>
 </html>
-
