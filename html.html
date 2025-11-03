@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akli ZEROUAL - QA Tester Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #059669;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease, transform 0.3s cubic-bezier(0.4,2,0.6,1.5);
+        }
+
+        .nav-links a:hover {
+            color: #059669;
+            transform: translateY(-4px) scale(1.1) rotate(-3deg);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0; /* far back */
+        }
+
+        /* Image layer (provided illustration) */
+        .hero-image {
+            position: absolute;
+            inset: 0;
+            background-image: url('qa-bg.jpg'); /* save provided image as qa-bg.jpg in project root */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 1;
+            transform: translateY(0);
+            animation: kenburns 28s ease-in-out infinite alternate;
+            filter: saturate(1.05) contrast(1.02);
+        }
+
+        @keyframes kenburns {
+            0% { transform: scale(1) translateY(0); }
+            100% { transform: scale(1.08) translateY(-1%); }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 150, 105, 0.4);
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 4;
+        }
+
+        /* QA Scene (animated background illustration) */
+        .qa-scene {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+            opacity: 0.4; /* make the tester more visible */
+        }
+        .qa-scene svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        /* Bugs animation */
+        @keyframes bugMove1 {
+            0% { offset-distance: 0%; transform: rotate(0deg); }
+            50% { transform: rotate(3deg); }
+            100% { offset-distance: 100%; transform: rotate(-3deg); }
+        }
+        @keyframes bugMove2 {
+            0% { offset-distance: 0%; transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+            100% { offset-distance: 100%; transform: rotate(-5deg); }
+        }
+        .bug {
+            offset-rotate: auto;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+        .bug--slow { animation-duration: 24s; }
+        .bug--med { animation-duration: 18s; }
+        .bug--fast { animation-duration: 12s; }
+        /* Scanner beam sweep */
+        @keyframes sweep {
+            0% { transform: rotate(-20deg); }
+            50% { transform: rotate(20deg); }
+            100% { transform: rotate(-20deg); }
+        }
+        .scanner {
+            transform-origin: center 60%;
+            animation: sweep 9s ease-in-out infinite;
+        }
+        /* Tester subtle bob to imply movement */
+        @keyframes bob {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+            100% { transform: translateY(0); }
+        }
+        .tester {
+            animation: bob 3.5s ease-in-out infinite;
+        }
+        /* Reduce visual density on small screens */
+        @media (max-width: 768px) {
+            .qa-scene { opacity: 0.18; }
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-text h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-text p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4,2,0.6,1.5);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #059669;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #047857;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn:hover {
+            transform: translateY(-4px) scale(1.07) rotate(-2deg);
+            box-shadow: 0 8px 24px rgba(5,150,105,0.15);
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: #1f2937;
+            transition: transform 0.3s cubic-bezier(0.4,2,0.6,1.5);
+        }
+
+        .section-title:hover {
+            transform: scale(1.07) rotate(-2deg);
+        }
+
+        /* About Section */
+        .about {
+            background: #f0fdf4;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+
+        .about-text p {
+            margin-bottom: 1rem;
+            color: #6b7280;
+            line-height: 1.8;
+        }
+
+        .about-image {
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 300px;
+            height: 300px;
+            border-radius: 60%;
+            object-fit: cover;
+            border: 4px solid #059669;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s cubic-bezier(0.4,2,0.6,1.5), box-shadow 0.3s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px) scale(1.04) rotate(-2deg);
+            box-shadow: 0 12px 32px rgba(5,150,105,0.13);
+        }
+
+        .skill-icon {
+            font-size: 2.5rem;
+            color: #059669;
+            margin-bottom: 1rem;
+        }
+
+        .skill-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .skill-card p {
+            color: #6b7280;
+        }
+
+        /* Projects Section */
+        .projects {
+            background: #f0fdf4;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s cubic-bezier(0.4,2,0.6,1.5), box-shadow 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.04) rotate(-2deg);
+            box-shadow: 0 12px 32px rgba(5,150,105,0.13);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #059669, #047857);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .project-content p {
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        /* Experience Section */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e5e7eb;
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: 0;
+            margin-right: 50%;
+            padding-right: 2rem;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: 50%;
+            margin-right: 0;
+            padding-left: 2rem;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            background: #059669;
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Contact Section */
+        .contact {
+            background: #1f2937;
+            color: white;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            justify-items: center;
+            text-align: center;
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Center the contact info block */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+
+        .contact-icon {
+            margin-right: 1rem;
+            color: #059669;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 0.75rem;
+            border: 1px solid #374151;
+            border-radius: 6px;
+            background: #374151;
+            color: white;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #059669;
+        }
+
+        /* Footer */
+        .footer {
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease, transform 0.3s cubic-bezier(0.4,2,0.6,1.5);
+        }
+
+        .social-links a:hover {
+            color: #059669;
+            transform: scale(1.2) rotate(8deg);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                justify-items: center;
+                text-align: center;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                margin-left: 50px;
+                margin-right: 0;
+                padding-left: 1rem;
+                padding-right: 0;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+        }
+
+        /* Ensure View My Work button is white with green text */
+        .btn-view-work {
+            background: #fff !important;
+            color: #059669 !important;
+            border: 2px solid #059669;
+        }
+        .btn-view-work:hover {
+            background: #059669 !important;
+            color: #fff !important;
+            border: 2px solid #059669;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">Akli ZEROUAL</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="QA_video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-image" role="img" aria-label="QA tester chasing bugs illustration"></div>
+        <div class="hero-overlay"></div>
+        <!-- Animated QA background scene -->
+        <div class="qa-scene" aria-hidden="true">
+            <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+                <!-- Network/grid background -->
+                <defs>
+                    <linearGradient id="g1" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/>
+                        <stop offset="100%" stop-color="#34d399" stop-opacity="0.05"/>
+                    </linearGradient>
+                    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#34d399" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
+                    </radialGradient>
+                    <path id="p1" d="M 100 700 C 300 600 450 650 650 550 C 850 450 1000 500 1100 420"/>
+                    <path id="p2" d="M 150 200 C 350 260 480 220 700 300 C 900 370 1000 360 1130 390"/>
+                    <path id="p3" d="M 80 480 C 260 420 380 470 560 430 C 780 380 980 420 1150 350"/>
+                    <!-- Simple bug symbol: body + legs -->
+                    <g id="bugSymbol">
+                        <ellipse cx="0" cy="0" rx="10" ry="14" fill="#ef4444"/>
+                        <circle cx="0" cy="-12" r="6" fill="#b91c1c"/>
+                        <line x1="-12" y1="-6" x2="-24" y2="-10" stroke="#b91c1c" stroke-width="3"/>
+                        <line x1="12" y1="-6" x2="24" y2="-10" stroke="#b91c1c" stroke-width="3"/>
+                        <line x1="-12" y1="0" x2="-24" y2="0" stroke="#b91c1c" stroke-width="3"/>
+                        <line x1="12" y1="0" x2="24" y2="0" stroke="#b91c1c" stroke-width="3"/>
+                        <line x1="-12" y1="6" x2="-24" y2="10" stroke="#b91c1c" stroke-width="3"/>
+                        <line x1="12" y1="6" x2="24" y2="10" stroke="#b91c1c" stroke-width="3"/>
+                    </g>
+                </defs>
+
+                <!-- Soft glow nodes -->
+                <circle cx="200" cy="180" r="90" fill="url(#glow)"/>
+                <circle cx="980" cy="220" r="120" fill="url(#glow)"/>
+                <circle cx="640" cy="640" r="140" fill="url(#glow)"/>
+
+                <!-- QA Tester silhouette with magnifying glass (clearer, larger) -->
+                <g class="tester" transform="translate(220,520) scale(1.25)" opacity="0.95">
+                    <!-- torso/legs -->
+                    <path d="M0 20 C 30 -80 170 -80 200 20 L 200 90 L 0 90 Z" fill="url(#g1)" stroke="#ffffff" stroke-opacity="0.55" stroke-width="2"/>
+                    <!-- head -->
+                    <circle cx="100" cy="-60" r="38" fill="#34d399" opacity="0.85" stroke="#ffffff" stroke-opacity="0.6" stroke-width="2"/>
+                    <!-- front arm reaching out -->
+                    <path d="M150,10 C 180,0 200,-10 230,-25" stroke="#a7f3d0" stroke-width="10" stroke-linecap="round"/>
+                    <!-- back arm -->
+                    <path d="M80,10 C 60,0 40,5 20,0" stroke="#a7f3d0" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
+                    <!-- magnifying glass -->
+                    <g class="scanner" transform="translate(240,-35)">
+                        <circle cx="0" cy="0" r="40" fill="none" stroke="#e5fff6" stroke-width="7"/>
+                        <rect x="-6" y="38" width="12" height="30" rx="6" fill="#e5fff6"/>
+                        <!-- stronger scanning beam -->
+                        <path d="M0,0 L210,85 L210,130 L0,22 Z" fill="#10b981" opacity="0.28"/>
+                    </g>
+                    <!-- running leg shapes -->
+                    <path d="M40,90 C 60,120 100,120 120,90" fill="none" stroke="#a7f3d0" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+                    <path d="M160,90 C 180,120 220,120 240,90" fill="none" stroke="#a7f3d0" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+                </g>
+
+                <!-- Moving bugs along paths -->
+                <g>
+                    <use href="#bugSymbol" class="bug bug--fast" style="offset-path: path('M 100 700 C 300 600 450 650 650 550 C 850 450 1000 500 1100 420'); animation-name: bugMove1;"/>
+                    <use href="#bugSymbol" class="bug bug--med" style="offset-path: path('M 150 200 C 350 260 480 220 700 300 C 900 370 1000 360 1130 390'); animation-name: bugMove2; animation-delay: 2s;"/>
+                    <use href="#bugSymbol" class="bug bug--slow" style="offset-path: path('M 80 480 C 260 420 380 470 560 430 C 780 380 980 420 1150 350'); animation-name: bugMove1; animation-delay: 4s;"/>
+                    <use href="#bugSymbol" class="bug bug--med" style="offset-path: path('M 1100 420 C 900 430 760 470 600 520 C 440 570 280 560 120 600'); animation-name: bugMove2; animation-delay: 6s;"/>
+                </g>
+
+                <!-- Decorative network lines -->
+                <path d="M 120 140 L 400 260 L 720 200 L 980 260" stroke="#10b981" stroke-opacity="0.25" stroke-width="2" fill="none"/>
+                <path d="M 180 660 L 460 560 L 760 600 L 1040 520" stroke="#10b981" stroke-opacity="0.2" stroke-width="2" fill="none"/>
+                <g fill="#10b981" fill-opacity="0.35">
+                    <circle cx="120" cy="140" r="4"/>
+                    <circle cx="400" cy="260" r="4"/>
+                    <circle cx="720" cy="200" r="4"/>
+                    <circle cx="980" cy="260" r="4"/>
+                    <circle cx="180" cy="660" r="4"/>
+                    <circle cx="460" cy="560" r="4"/>
+                    <circle cx="760" cy="600" r="4"/>
+                    <circle cx="1040" cy="520" r="4"/>
+                </g>
+            </svg>
+        </div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Welcome to Akli's portfolio</h1>
+                <h2>QA Tester & Quality Assurance Specialist</h2>
+                <p>I ensure software quality through comprehensive testing strategies, automated solutions, and meticulous attention to detail. With expertise in both manual and automated testing, I help deliver bug-free, user-friendly applications.</p>
+                <div class="cta-buttons">
+                    <a href="#projects" class="btn btn-primary btn-view-work">View My Work</a>
+                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Dedicated QA Professional with a Passion for Quality</h3>
+                    <p>I'm a certified QA Tester with over 5 years of experience in software testing and quality assurance. My journey in testing began with a curiosity about how software works and has evolved into a passion for ensuring exceptional user experiences.</p>
+                    <p>I specialize in both manual and automated testing methodologies, with expertise in functional testing, regression testing, performance testing, and user acceptance testing. My approach combines technical skills with analytical thinking to identify potential issues before they reach end users.</p>
+                    <p>When I'm not testing applications, you'll find me exploring new testing tools, contributing to testing communities, or sharing knowledge about best practices in quality assurance. I believe in continuous learning and staying updated with the latest testing methodologies and tools.</p>
+                </div>
+                <div class="about-image">
+                    <img src="Selfie.jpg" alt="Profile" class="profile-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <div class="container">
+            <h2 class="section-title">Testing Skills & Tools</h2>
+            <div class="skills-grid">
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">
+                        <i class="fas fa-bug"></i>
+                    </div>
+                    <h3>Manual Testing</h3>
+                    <p>Functional Testing, Regression Testing, User Acceptance Testing, Exploratory Testing, Smoke Testing, Sanity Testing</p>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Automated Testing</h3>
+                    <p>Selenium WebDriver, Cypress, Playwright, Appium, TestNG, JUnit, Cucumber, BDD Framework</p>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>Testing Tools</h3>
+                    <p>JIRA, TestRail, Postman, SoapUI, Charles Proxy, Browser DevTools, Git, Jenkins</p>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Test Management</h3>
+                    <p>Test Planning, Test Case Design, Bug Reporting, Test Metrics, Risk Analysis, Quality Gates</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section projects">
+        <div class="container">
+            <h2 class="section-title">Testing Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card fade-in">
+                    <div class="project-image">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Ivalua's E-Procurement Platform Testing</h3>
+                        <p>Comprehensive testing of Ivalua's E-Procurement Platform application including payment integration, inventory management, and user workflows. Implemented automated test suites reducing regression testing time by 70%.</p>
+                        <div class="project-tags">
+                            <span class="tag">Selenium</span>
+                            <span class="tag">TestNG</span>
+                            <span class="tag">JIRA</span>
+                            <span class="tag">API Testing</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card fade-in">
+                    <div class="project-image">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Mobile Banking App Testing</h3>
+                        <p>End-to-end testing of a mobile banking application across multiple devices and platforms. Developed automated test scripts for critical user journeys and security testing protocols.</p>
+                        <div class="project-tags">
+                            <span class="tag">Appium</span>
+                            <span class="tag">Mobile Testing</span>
+                            <span class="tag">Security Testing</span>
+                            <span class="tag">Cross-platform</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card fade-in">
+                    <div class="project-image">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Test Automation Framework</h3>
+                        <p>Built a comprehensive test automation framework using Selenium and Cucumber. Implemented CI/CD integration and created reusable test components that improved team productivity by 40%.</p>
+                        <div class="project-tags">
+                            <span class="tag">Selenium</span>
+                            <span class="tag">Cucumber</span>
+                            <span class="tag">BDD</span>
+                            <span class="tag">CI/CD</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+        <div class="container">
+            <h2 class="section-title">Professional Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content fade-in">
+                        <h3>Senior QA Tester</h3>
+                        <p><strong>Tech Solutions Inc.</strong> | 2022 - Present</p>
+                        <p>Lead testing initiatives for enterprise applications, mentor junior testers, and implement automated testing strategies. Reduced bug escape rate by 60% through improved testing processes.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content fade-in">
+                        <h3>QA Automation Engineer</h3>
+                        <p><strong>Digital Innovations Ltd.</strong> | 2020 - 2022</p>
+                        <p>Developed and maintained automated test suites, collaborated with development teams for CI/CD integration, and performed comprehensive regression testing for web and mobile applications.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+<section id="contact" class="section contact">
+    <div class="container">
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3>Let's Work Together</h3>
+                <p style="margin-bottom: 30px;">
+                    I'm always interested in new testing opportunities and challenging projects.
+                    Whether you need a QA specialist for your team or want to discuss testing strategies,
+                    feel free to reach out!
+                </p>
+
+                <div class="contact-item">
+                    <i class="fas fa-envelope contact-icon"></i>
+                    <span>aklizeroual@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone contact-icon"></i>
+                    <span>+33 7 61 87 08 91</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt contact-icon"></i>
+                    <span>Paris, France</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p>&copy; Thank you for visiting my portfolio</p>
+        </div>
+    </footer>
+
+    <!-- EmailJS CDN -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS with User ID (replace with your actual User ID)
+        emailjs.init("YOUR_USER_ID_HERE"); // Replace with your EmailJS User ID
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Form submission handling with EmailJS
+        document.querySelector('.contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            
+            // Send email using EmailJS
+            emailjs.sendForm('service_4i7i8nk', 'template_l2ce9h5', this)
+                .then(function() {
+                    // Success
+                    alert('Thank you for your message! I\'ll get back to you soon.');
+                    document.querySelector('.contact-form').reset();
+                }, function(error) {
+                    // Error
+                    console.error('Failed to send email:', error);
+                    alert('Sorry, there was an error sending your message. Please try again or contact me directly at aklizeroual@gmail.com');
+                })
+                .finally(function() {
+                    // Reset button state
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                });
+        });
+
+        // Add some interactive effects
+        document.querySelectorAll('.skill-card, .project-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Typing effect for hero section
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            type();
+        }
+
+        // Initialize typing effect when page loads
+        window.addEventListener('load', () => {
+            const heroTitle = document.querySelector('.hero-text h1');
+            const originalText = heroTitle.textContent;
+            typeWriter(heroTitle, originalText, 150);
+        });
+    </script>
+</body>
+</html>
